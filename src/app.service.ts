@@ -2,6 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from './service/prisma/prisma.service';
 import { CreateInvitationDto } from './dto/create-invitation.dto';
 import { ResponseDto } from './dto/response.dto';
+import { ResponseGetAllDto } from './dto/responseGetAll.dto';
+import { ResponseDeleteDto } from './dto/responseDelete.dto';
 
 @Injectable()
 export class AppService {
@@ -56,5 +58,29 @@ export class AppService {
       duplicated: false,
       data: nuevoInvitado
     } as ResponseDto;
+  }
+
+  async getAllInvitados() {
+    const invitados = await this.prismaService.invitados.findMany();
+
+    return {
+      ok: true,
+      data: invitados ?? []
+    } as ResponseGetAllDto
+  }
+
+  async deleteInvitado(id: string) {
+    const invitado = await this.prismaService.invitados.delete({ where: { id } })
+
+    if (!invitado) {
+      return {
+        ok: false,
+        data: []
+      } as ResponseDeleteDto
+    }
+    return {
+      ok: true,
+      data: invitado
+    } as ResponseDeleteDto
   }
 }
