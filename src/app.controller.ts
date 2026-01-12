@@ -23,5 +23,21 @@ export class AppController {
   async deleteInvitado(@Param('id') id: string): Promise<ResponseDeleteDto> {
     return await this.appService.deleteInvitado(id);
   }
+
+  @Get("/create-checkout-session/:amount")
+  async createCheckoutSession(@Param('amount') amount: number): Promise<any> {
+    return await this.appService.createSession(amount)
+  }
+
+  @Post("/create-pago/:amount")
+  async createPago(@Param('amount') amount: number): Promise<any> {
+    return await this.appService.createPago(amount)
+  }
+
+  @Get("/getTotalPagos")
+  async getTotalPago(): Promise<any> {
+    return await this.appService.getTotalPagos()
+  }
+
 }
 

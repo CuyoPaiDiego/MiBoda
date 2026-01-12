@@ -4,9 +4,12 @@ import { CreateInvitationDto } from './dto/create-invitation.dto';
 import { ResponseDto } from './dto/response.dto';
 import { ResponseGetAllDto } from './dto/responseGetAll.dto';
 import { ResponseDeleteDto } from './dto/responseDelete.dto';
+import Stripe from 'stripe'
 
 @Injectable()
 export class AppService {
+
+  private stripe = new Stripe(process.env.SK_STRIPE!)
 
   constructor(
     private prismaService: PrismaService
@@ -82,5 +85,50 @@ export class AppService {
       ok: true,
       data: invitado
     } as ResponseDeleteDto
+  }
+
+  async createSession(amount: number) {
+    const amountDecimal = amount * 100
+    const session = this.stripe.checkout.sessions.create({
+      line_items: [
+        {
+          price_data: {
+            product_data: {
+              name: "Luna de miel",
+              description: "Luna de miel - Hitsel y Diego"
+            },
+            currency: 'mxn',
+            unit_amount: amountDecimal
+          },
+          quantity: 1
+        }
+      ],
+      mode: 'payment',
+      success_url: `https://dyh-gutech.com/success/${amount}`,
+      cancel_url: 'https://dyh-gutech.com/boda',
+    })
+    return session
+  }
+
+  async createPago(amount: number) {
+    const pay = await this.prismaService.pagos.create({
+      data: {
+        cantidad: parseInt(amount.toString())
+      }
+    });
+
+    return {
+      ok: true,
+      data: pay
+    }
+  }
+
+  async getTotalPagos() {
+    const result = await this.prismaService.pagos.aggregate({
+      _sum: {
+        cantidad: true
+      }
+    })
+    return { total: result._sum.cantidad ?? 0 }
   }
 }
