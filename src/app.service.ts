@@ -5,6 +5,7 @@ import { ResponseDto } from './dto/response.dto';
 import { ResponseGetAllDto } from './dto/responseGetAll.dto';
 import { ResponseDeleteDto } from './dto/responseDelete.dto';
 import Stripe from 'stripe'
+import { UpdateInvitationDto } from './dto/update-invitation.dto';
 
 @Injectable()
 export class AppService {
@@ -61,6 +62,22 @@ export class AppService {
       duplicated: false,
       data: nuevoInvitado
     } as ResponseDto;
+  }
+
+  async updateInvitado(data: UpdateInvitationDto, id: string) {
+
+    const updatedInvitado = await this.prismaService.invitados.update({
+      where: { id },
+      data
+    });
+
+    if (!updatedInvitado) return { ok: false, data: [] }
+
+    return {
+      ok: true,
+      data: updatedInvitado
+    }
+
   }
 
   async getAllInvitados() {

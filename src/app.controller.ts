@@ -1,9 +1,11 @@
-import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
 import { AppService } from './app.service';
 import { CreateInvitationDto } from './dto/create-invitation.dto';
 import { ResponseDto } from './dto/response.dto';
 import { ResponseGetAllDto } from './dto/responseGetAll.dto';
 import { ResponseDeleteDto } from './dto/responseDelete.dto';
+import { UpdateInvitationDto } from './dto/update-invitation.dto';
+import { ResponsePutDto } from './dto/responsePut.dto';
 
 @Controller()
 export class AppController {
@@ -12,6 +14,11 @@ export class AppController {
   @Post('/create')
   async createInvitado(@Body() dto: CreateInvitationDto): Promise<ResponseDto> {
     return await this.appService.crearInvitados(dto);
+  }
+
+  @Put('/update/:id')
+  async updateInvitado(@Body() dto: UpdateInvitationDto, @Param('id') id: string): Promise<ResponsePutDto> {
+    return await this.appService.updateInvitado(dto, id);
   }
 
   @Get('/get')
