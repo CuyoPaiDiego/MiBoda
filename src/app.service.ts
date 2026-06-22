@@ -34,6 +34,7 @@ export class AppService {
 
     // Buscar duplicados comparando familia Y alias
     const invitadosExistentes = await this.prismaService.invitados.findMany({
+      where: { evento: invitado.evento },
       select: { id: true, familia: true, alias: true, cantidad: true, created_at: true, updated_at: true }
     });
 
