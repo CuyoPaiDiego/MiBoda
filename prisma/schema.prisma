@@ -12,6 +12,7 @@ model Invitados {
   familia    String
   alias      String?
   cantidad   Int
+  evento     String   @default("BodaDyH")
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 }

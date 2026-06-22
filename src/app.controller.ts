@@ -21,9 +21,9 @@ export class AppController {
     return await this.appService.updateInvitado(dto, id);
   }
 
-  @Get('/get')
-  async getInvitados(): Promise<ResponseGetAllDto> {
-    return await this.appService.getAllInvitados();
+  @Get('/get/:evento')
+  async getInvitados(@Param('evento') evento: string): Promise<ResponseGetAllDto> {
+    return await this.appService.getAllInvitados(evento);
   }
 
   @Delete("/delete/:id")

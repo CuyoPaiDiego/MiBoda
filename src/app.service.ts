@@ -54,7 +54,8 @@ export class AppService {
       data: {
         familia: invitado.familia, // Guardar el original
         alias: invitado.alias,
-        cantidad: invitado.cantidad
+        cantidad: invitado.cantidad,
+        evento: invitado.evento
       }
     });
 
@@ -80,8 +81,8 @@ export class AppService {
 
   }
 
-  async getAllInvitados() {
-    const invitados = await this.prismaService.invitados.findMany();
+  async getAllInvitados(evento: string = "BodaDyH") {
+    const invitados = await this.prismaService.invitados.findMany({ where: { evento } });
 
     return {
       ok: true,

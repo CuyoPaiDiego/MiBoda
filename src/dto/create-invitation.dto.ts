@@ -12,4 +12,6 @@ export class CreateInvitationDto {
     @IsNumber()
     cantidad: number;
 
+    @IsString()
+    evento: string;
 }
